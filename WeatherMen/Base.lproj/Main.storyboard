@@ -176,6 +176,9 @@
                             <constraint firstItem="CD7-a4-ypX" firstAttribute="bottom" secondItem="uBR-mf-6s6" secondAttribute="bottom" id="tY0-ec-hiP"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="listTableView" destination="uBR-mf-6s6" id="ZG9-p2-450"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9rY-2k-xGj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
