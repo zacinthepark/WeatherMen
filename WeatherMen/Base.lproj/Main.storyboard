@@ -166,6 +166,10 @@
                                     <outlet property="dataSource" destination="MZB-1g-EEe" id="oTN-Ba-rSH"/>
                                 </connections>
                             </tableView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="we4-lZ-265">
+                                <rect key="frame" x="188.5" y="429.5" width="37" height="37"/>
+                                <color key="color" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="CD7-a4-ypX"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -173,14 +177,17 @@
                             <constraint firstItem="osl-10-NMY" firstAttribute="trailing" secondItem="CD7-a4-ypX" secondAttribute="trailing" id="GOq-KT-yfl"/>
                             <constraint firstItem="CD7-a4-ypX" firstAttribute="trailing" secondItem="uBR-mf-6s6" secondAttribute="trailing" id="JWG-KO-Vub"/>
                             <constraint firstItem="osl-10-NMY" firstAttribute="leading" secondItem="CD7-a4-ypX" secondAttribute="leading" id="OI7-TZ-q9A"/>
+                            <constraint firstItem="we4-lZ-265" firstAttribute="centerY" secondItem="UJz-Dj-LSG" secondAttribute="centerY" id="QiE-v2-Tff"/>
                             <constraint firstItem="uBR-mf-6s6" firstAttribute="leading" secondItem="CD7-a4-ypX" secondAttribute="leading" id="Rm7-bU-ghB"/>
                             <constraint firstItem="uBR-mf-6s6" firstAttribute="top" secondItem="osl-10-NMY" secondAttribute="bottom" id="fyG-kO-ED1"/>
                             <constraint firstItem="osl-10-NMY" firstAttribute="top" secondItem="CD7-a4-ypX" secondAttribute="top" id="nP1-wZ-9gr"/>
                             <constraint firstItem="CD7-a4-ypX" firstAttribute="bottom" secondItem="uBR-mf-6s6" secondAttribute="bottom" id="tY0-ec-hiP"/>
+                            <constraint firstItem="we4-lZ-265" firstAttribute="centerX" secondItem="UJz-Dj-LSG" secondAttribute="centerX" id="zGX-Ue-Egy"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="listTableView" destination="uBR-mf-6s6" id="ZG9-p2-450"/>
+                        <outlet property="loader" destination="we4-lZ-265" id="DzO-Gv-sSN"/>
                         <outlet property="locationLabel" destination="GKr-AA-ito" id="Nuf-pE-w5f"/>
                     </connections>
                 </viewController>

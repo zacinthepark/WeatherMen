@@ -10,11 +10,15 @@ import CoreLocation
 
 class CurrentDestinationViewController: UIViewController {
     
+    @IBOutlet weak var loader: UIActivityIndicatorView!
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var listTableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        listTableView.alpha = 0.0
+        loader.alpha = 1.0
         
         /*
         let location = CLLocation(latitude: 37.350018, longitude: 127.108908)
@@ -27,6 +31,11 @@ class CurrentDestinationViewController: UIViewController {
         NotificationCenter.default.addObserver(forName: WeatherDataSource.weatherInfoDidUpdate, object: nil, queue: .main) { (notification) in
             self.listTableView.reloadData()
             self.locationLabel.text = LocationManager.shared.currentLocationTitle
+            
+            UIView.animate(withDuration: 0.3) {
+                self.listTableView.alpha = 1.0
+                self.loader.alpha = 0.0
+            }
         }
     }
     
