@@ -6,17 +6,19 @@
 //
 
 import UIKit
+import CoreLocation
 
 class CurrentDestinationViewController: UIViewController {
     
     @IBOutlet weak var listTableView: UITableView!
     
-    
-
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        let location = CLLocation(latitude: 37.350018, longitude: 127.108908)
+        WeatherDataSource.shared.fetch(location: location) {
+            self.listTableView.reloadData()
+        }
     }
     
 
@@ -57,6 +59,13 @@ extension CurrentDestinationViewController: UITableViewDataSource {
         
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "SummaryTableViewCell", for: indexPath) as! SummaryTableViewCell
+            
+            if let weather = WeatherDataSource.shared.summary?.weather.first, let main = WeatherDataSource.shared.summary?.main {
+                cell.weatherImageView.image = UIImage(named: weather.icon)
+                cell.statusLabel.text = weather.description
+                cell.minMaxLabel.text = "최고\(main.temp_max.temperatureString) 최소\(main.temp_min.temperatureString)"
+                cell.currentTemperatureLabel.text = "\(main.temp.temperatureString)"
+            }
             
             return cell
         }
