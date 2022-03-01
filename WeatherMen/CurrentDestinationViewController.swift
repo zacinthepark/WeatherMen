@@ -10,17 +10,24 @@ import CoreLocation
 
 class CurrentDestinationViewController: UIViewController {
     
+    @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var listTableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        /*
         let location = CLLocation(latitude: 37.350018, longitude: 127.108908)
         WeatherDataSource.shared.fetch(location: location) {
             self.listTableView.reloadData()
-        }
+        }*/
         
         LocationManager.shared.updateLocation()
+        
+        NotificationCenter.default.addObserver(forName: WeatherDataSource.weatherInfoDidUpdate, object: nil, queue: .main) { (notification) in
+            self.listTableView.reloadData()
+            self.locationLabel.text = LocationManager.shared.currentLocationTitle
+        }
     }
     
 
