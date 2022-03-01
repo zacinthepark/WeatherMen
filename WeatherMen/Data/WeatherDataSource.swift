@@ -15,7 +15,7 @@ class WeatherDataSource {
     //현재 날씨 저장
     var summary: CurrentWeather?
     //예보 데이터 저장
-    var forecast: Forecast?
+    var forecastList = [ForecastData]()
     
     //Api 요청할 때 사용할 DispatchQueue 저장 / .concurrent 옵션 추가하여 최대한 많은 작업 동시에 처리
     let openWeatherMapApiQueue = DispatchQueue(label: "OpenWeatherMapApiQueue", attributes: .concurrent)
@@ -46,9 +46,16 @@ class WeatherDataSource {
             self.fetchForecast(location: location) { (result) in
                 switch result {
                 case .success(let data):
-                    self.forecast = data
+                    self.forecastList = data.list.map {
+                        let dt = Date(timeIntervalSince1970: TimeInterval($0.dt))
+                        let icon = $0.weather.first?.icon ?? ""
+                        let weather = $0.weather.first?.description ?? "알 수 없음"
+                        let temperature = $0.main.temp
+                        
+                        return ForecastData(date: dt, icon: icon, weather: weather, temperature: temperature)
+                    }
                 default:
-                    self.forecast = nil
+                    self.forecastList = []
                 }
                 
                 self.group.leave()
