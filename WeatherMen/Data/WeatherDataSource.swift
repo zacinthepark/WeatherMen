@@ -59,11 +59,11 @@ class WeatherDataSource {
             self.fetchForecast(location: location) { (result) in
                 switch result {
                 case .success(let data):
-                    self.forecastList = data.list.map {
+                    self.forecastList = data.hourly.map {
                         let dt = Date(timeIntervalSince1970: TimeInterval($0.dt))
                         let icon = $0.weather.first?.icon ?? ""
                         let weather = $0.weather.first?.description ?? "알 수 없음"
-                        let temperature = $0.main.temp
+                        let temperature = $0.temp
                         
                         return ForecastData(date: dt, icon: icon, weather: weather, temperature: temperature)
                     }
@@ -150,20 +150,8 @@ extension WeatherDataSource {
 }
 
 extension WeatherDataSource {
-    private func fetchForecast(cityName: String, completion: @escaping (Result<Forecast, Error>) -> ()) {
-        let urlStr = "https://api.openweathermap.org/data/2.5/forecast?q=\(cityName)&appid=\(openWeatherMapApiKey)&units=metric&lang=kr"
-        
-        fetch(urlStr: urlStr, completion: completion)
-    }
-
-    private func fetchForecast(cityID: Int, completion: @escaping (Result<Forecast, Error>) -> ()) {
-        let urlStr = "https://api.openweathermap.org/data/2.5/forecast?id=\(cityID)&appid=\(openWeatherMapApiKey)&units=metric&lang=kr"
-        
-        fetch(urlStr: urlStr, completion: completion)
-    }
-
     private func fetchForecast(location: CLLocation, completion: @escaping (Result<Forecast, Error>) -> ()) {
-        let urlStr = "https://api.openweathermap.org/data/2.5/forecast?lat=\(location.coordinate.latitude)&lon=\(location.coordinate.longitude)&appid=\(openWeatherMapApiKey)&units=metric&lang=kr"
+        let urlStr = "https://api.openweathermap.org/data/2.5/onecall?lat=\(location.coordinate.latitude)&lon=\(location.coordinate.longitude)&exclude=current,minutely,daily,alerts&appid=\(openWeatherMapApiKey)&units=metric&lang=kr"
         
         fetch(urlStr: urlStr, completion: completion)
     }
