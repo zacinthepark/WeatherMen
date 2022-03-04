@@ -28,7 +28,7 @@ class WeatherDataSource {
     //현재 날씨 저장
     var summary: CurrentWeather?
     //예보 데이터 저장
-    var forecastList = [ForecastData]()
+    var forecastList = [OpenWeatherMapForecastData]()
     
     //Api 요청할 때 사용할 DispatchQueue 저장 / .concurrent 옵션 추가하여 최대한 많은 작업 동시에 처리
     let openWeatherMapApiQueue = DispatchQueue(label: "OpenWeatherMapApiQueue", attributes: .concurrent)
@@ -56,7 +56,7 @@ class WeatherDataSource {
         
         group.enter()
         openWeatherMapApiQueue.async {
-            self.fetchForecast(location: location) { (result) in
+            self.fetchOpenWeatherMapForecast(location: location) { (result) in
                 switch result {
                 case .success(let data):
                     self.forecastList = data.hourly.map {
@@ -65,7 +65,7 @@ class WeatherDataSource {
                         let weather = $0.weather.first?.description ?? "알 수 없음"
                         let temperature = $0.temp
                         
-                        return ForecastData(date: dt, icon: icon, weather: weather, temperature: temperature)
+                        return OpenWeatherMapForecastData(date: dt, icon: icon, weather: weather, temperature: temperature)
                     }
                 default:
                     self.forecastList = []
@@ -129,18 +129,6 @@ extension WeatherDataSource {
         
         task.resume()
     }
-    
-    private func fetchCurrentWeather(cityName: String, completion: @escaping (Result<CurrentWeather, Error>) -> ()) {
-        let urlStr = "https://api.openweathermap.org/data/2.5/weather?q=\(cityName)&appid=\(openWeatherMapApiKey)&units=metric&lang=kr"
-        
-        fetch(urlStr: urlStr, completion: completion)
-    }
-
-    private func fetchCurrentWeather(cityID: Int, completion: @escaping (Result<CurrentWeather, Error>) -> ()) {
-        let urlStr = "https://api.openweathermap.org/data/2.5/weather?id=\(cityID)&appid=\(openWeatherMapApiKey)&units=metric&lang=kr"
-        
-        fetch(urlStr: urlStr, completion: completion)
-    }
 
     private func fetchCurrentWeather(location: CLLocation, completion: @escaping (Result<CurrentWeather, Error>) -> ()) {
         let urlStr = "https://api.openweathermap.org/data/2.5/weather?lat=\(location.coordinate.latitude)&lon=\(location.coordinate.longitude)&appid=\(openWeatherMapApiKey)&units=metric&lang=kr"
@@ -150,7 +138,7 @@ extension WeatherDataSource {
 }
 
 extension WeatherDataSource {
-    private func fetchForecast(location: CLLocation, completion: @escaping (Result<Forecast, Error>) -> ()) {
+    private func fetchOpenWeatherMapForecast(location: CLLocation, completion: @escaping (Result<OpenWeatherMapForecast, Error>) -> ()) {
         let urlStr = "https://api.openweathermap.org/data/2.5/onecall?lat=\(location.coordinate.latitude)&lon=\(location.coordinate.longitude)&exclude=current,minutely,daily,alerts&appid=\(openWeatherMapApiKey)&units=metric&lang=kr"
         
         fetch(urlStr: urlStr, completion: completion)

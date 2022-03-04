@@ -77,14 +77,14 @@ func fetch<ParsingType: Codable>(urlStr: String, completion: @escaping (Result<P
     task.resume()
 }
 
-func fetchForecast(location: CLLocation, completion: @escaping (Result<Forecast, Error>) -> ()) {
+func fetchOpenWeatherMapForecast(location: CLLocation, completion: @escaping (Result<Forecast, Error>) -> ()) {
     let urlStr = "https://api.openweathermap.org/data/2.5/onecall?lat=\(location.coordinate.latitude)&lon=\(location.coordinate.longitude)&exclude=current,minutely,daily,alerts&appid=\(openWeatherMapApiKey)&units=metric&lang=kr"
     
     fetch(urlStr: urlStr, completion: completion)
 }
 
 let location = CLLocation(latitude: 37.350018, longitude: 127.108908)
-fetchForecast(location: location) { (result) in
+fetchOpenWeatherMapForecast(location: location) { (result) in
     switch result {
     case .success(let weather):
         dump(weather)
