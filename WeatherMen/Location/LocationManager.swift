@@ -83,7 +83,7 @@ extension LocationManager: CLLocationManagerDelegate {
                 }
             }
             
-            print(self?.currentLocationTitle)
+            //print(self?.currentLocationTitle)
         }
     }
     

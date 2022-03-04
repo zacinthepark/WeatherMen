@@ -2,23 +2,14 @@ import UIKit
 import CoreLocation
 
 struct Forecast: Codable {
-    let lat: Double
-    let lon: Double
     
-    struct Hourly: Codable {
-        let dt: Int
-        let temp: Double
-        let pop: Double
+    let DailyForecasts: [DailyForecast]
+    
+    struct DailyForecast: Codable {
+        let EpochDate: Int
         
-        struct Weather: Codable {
-            let description: String
-            let icon: String
-        }
-        
-        let weather: [Weather]
     }
     
-    let hourly: [Hourly]
 }
 
 enum ApiError: Error {
@@ -78,17 +69,8 @@ func fetch<ParsingType: Codable>(urlStr: String, completion: @escaping (Result<P
 }
 
 func fetchForecast(location: CLLocation, completion: @escaping (Result<Forecast, Error>) -> ()) {
-    let urlStr = "https://api.openweathermap.org/data/2.5/onecall?lat=\(location.coordinate.latitude)&lon=\(location.coordinate.longitude)&exclude=current,minutely,daily,alerts&appid=\(openWeatherMapApiKey)&units=metric&lang=kr"
     
-    fetch(urlStr: urlStr, completion: completion)
-}
-
-let location = CLLocation(latitude: 37.350018, longitude: 127.108908)
-fetchForecast(location: location) { (result) in
-    switch result {
-    case .success(let weather):
-        dump(weather)
-    case .failure(let error):
-        print(error)
-    }
+    let urlStr = "http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=bHksqumX7phbLMJ6RL2i2TRv384fK5Uq&q=\(location.coordinate.latitude)%2C%20\(location.coordinate.longitude)"
+    
+    
 }
