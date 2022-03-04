@@ -1,14 +1,26 @@
 import UIKit
 import CoreLocation
 
-struct Forecast: Codable {
+struct LocationKey: Codable {
+    let Key: String
     
-    let DailyForecasts: [DailyForecast]
-    
-    struct DailyForecast: Codable {
-        let EpochDate: Int
-        
+    struct GeoPosition: Codable {
+        let Latitude: Double
+        let Longitude: Double
     }
+    
+    let GeoPosition: GeoPosition
+}
+
+struct AccuWeatherForecast: Codable {
+    let EpochDateTime: Int
+    let IconPhrase: String
+    
+    struct Temperature: Codable {
+        let Value: Double
+    }
+    
+    let Temperature: Temperature
     
 }
 
@@ -68,9 +80,34 @@ func fetch<ParsingType: Codable>(urlStr: String, completion: @escaping (Result<P
     task.resume()
 }
 
-func fetchForecast(location: CLLocation, completion: @escaping (Result<Forecast, Error>) -> ()) {
+func fetchAccuWeatherLocationKey(location: CLLocation, completion: @escaping(Result<LocationKey, Error>) -> ()) {
+    let urlStr = "http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=\(accuWeatherApiKey)&q=\(location.coordinate.latitude)%2C%20\(location.coordinate.longitude)&language=ko-kr"
     
-    let urlStr = "http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=bHksqumX7phbLMJ6RL2i2TRv384fK5Uq&q=\(location.coordinate.latitude)%2C%20\(location.coordinate.longitude)"
-    
-    
+    fetch(urlStr: urlStr, completion: completion)
 }
+
+let location = CLLocation(latitude: 37.350018, longitude: 127.108908)
+fetchAccuWeatherLocationKey(location: location) { (result) in
+    switch result {
+    case .success(let weather):
+        dump(weather)
+    case .failure(let error):
+        print(error)
+    }
+}
+
+func fetchAccuWeatherForecast(locationKey: String, completion: @escaping(Result<[AccuWeatherForecast], Error>) -> ()) {
+    let urlStr = "http://dataservice.accuweather.com/forecasts/v1/hourly/12hour/\(Int(locationKey)!)?apikey=\(accuWeatherApiKey)&language=ko-kr&metric=true"
+    
+    fetch(urlStr: urlStr, completion: completion)
+}
+
+fetchAccuWeatherForecast(locationKey: "2331758") { (result) in
+    switch result {
+    case .success(let weather):
+        dump(weather)
+    case .failure(let error):
+        print(error)
+    }
+}
+
