@@ -87,14 +87,6 @@ func fetchAccuWeatherLocationKey(location: CLLocation, completion: @escaping(Res
 }
 
 let location = CLLocation(latitude: 37.350018, longitude: 127.108908)
-fetchAccuWeatherLocationKey(location: location) { (result) in
-    switch result {
-    case .success(let weather):
-        dump(weather)
-    case .failure(let error):
-        print(error)
-    }
-}
 
 func fetchAccuWeatherForecast(locationKey: String, completion: @escaping(Result<[AccuWeatherForecast], Error>) -> ()) {
     let urlStr = "http://dataservice.accuweather.com/forecasts/v1/hourly/12hour/\(Int(locationKey)!)?apikey=\(accuWeatherApiKey)&language=ko-kr&metric=true"
@@ -102,12 +94,17 @@ func fetchAccuWeatherForecast(locationKey: String, completion: @escaping(Result<
     fetch(urlStr: urlStr, completion: completion)
 }
 
-fetchAccuWeatherForecast(locationKey: "2331758") { (result) in
+fetchAccuWeatherLocationKey(location: location) { (result) in
     switch result {
-    case .success(let weather):
-        dump(weather)
-    case .failure(let error):
-        print(error)
+    case .success(let locationKey):
+        fetchAccuWeatherForecast(locationKey: locationKey.Key) { (result) in
+            switch result {
+            case .success(let data):
+                dump(data)
+            default: break
+            }
+        }
+    default: break
     }
 }
 

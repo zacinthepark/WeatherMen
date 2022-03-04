@@ -66,7 +66,7 @@ extension CurrentDestinationViewController: UITableViewDataSource {
         case 0:
             return 1
         case 1:
-            return WeatherDataSource.shared.forecastList.count
+            return WeatherDataSource.shared.openWeatherMapForecastList.count
         default:
             return 0
         }
@@ -90,7 +90,7 @@ extension CurrentDestinationViewController: UITableViewDataSource {
     
         let cell = tableView.dequeueReusableCell(withIdentifier: "ForecastTableViewCell", for: indexPath) as! ForecastTableViewCell
         
-        let target = WeatherDataSource.shared.forecastList[indexPath.row]
+        let target = WeatherDataSource.shared.openWeatherMapForecastList[indexPath.row]
         cell.dateLabel.text = target.date.dateString
         cell.timeLabel.text = target.date.timeString
         cell.weatherImageView.image = UIImage(named: target.icon)
