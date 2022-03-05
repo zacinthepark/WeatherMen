@@ -1,5 +1,5 @@
 //
-//  CurrentWeather.swift
+//  OpenWeatherMapCurrentWeather.swift
 //  WeatherMen
 //
 //  Created by zac on 2022/03/01.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CurrentWeather: Codable {
+struct OpenWeatherMapCurrentWeather: Codable {
     
     let dt: Int
     

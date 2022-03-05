@@ -26,9 +26,10 @@ class WeatherDataSource {
     static let weatherInfoDidUpdate = Notification.Name(rawValue: "weatherInfoDidUpdate")
     
     //현재 날씨 저장
-    var summary: CurrentWeather?
+    var summary: OpenWeatherMapCurrentWeather?
     //예보 데이터 저장
     var openWeatherMapForecastList = [OpenWeatherMapForecastData]()
+    var accuWeatherCurrentWeather: AccuWeatherCurrentWeather?
     var accuWeatherForeacstList = [AccuWeatherForecastData]()
     
     //Api 요청할 때 사용할 DispatchQueue 저장 / .concurrent 옵션 추가하여 최대한 많은 작업 동시에 처리
@@ -43,7 +44,7 @@ class WeatherDataSource {
     func fetch(location: CLLocation, completion: @escaping () -> ()) {
         group.enter()
         weatherApiQueue.async {
-            self.fetchCurrentWeather(location: location) { (result) in
+            self.fetchOpenWeatherMapCurrentWeather(location: location) { (result) in
                 switch result {
                 case .success(let data):
                     self.summary = data
@@ -68,8 +69,29 @@ class WeatherDataSource {
                         
                         return OpenWeatherMapForecastData(date: dt, icon: icon, weather: weather, temperature: temperature)
                     }
+                    self.openWeatherMapForecastList.removeLast(36)
                 default:
                     self.openWeatherMapForecastList = []
+                }
+                
+                self.group.leave()
+            }
+        }
+        
+        group.enter()
+        weatherApiQueue.async {
+            self.fetchAccuWeatherLocationKey(location: location) { (result) in
+                switch result {
+                case .success(let locationKey):
+                    self.fetchAccuWeatherCurrentWeather(locationKey: locationKey.Key) { (result) in
+                        switch result {
+                        case . success(let data):
+                            self.accuWeatherCurrentWeather = data.first
+                        default:
+                            self.accuWeatherCurrentWeather = nil
+                        }
+                    }
+                default: self.accuWeatherCurrentWeather = nil
                 }
                 
                 self.group.leave()
@@ -159,7 +181,7 @@ extension WeatherDataSource {
 }
 
 extension WeatherDataSource {
-    private func fetchCurrentWeather(location: CLLocation, completion: @escaping (Result<CurrentWeather, Error>) -> ()) {
+    private func fetchOpenWeatherMapCurrentWeather(location: CLLocation, completion: @escaping (Result<OpenWeatherMapCurrentWeather, Error>) -> ()) {
         let urlStr = "https://api.openweathermap.org/data/2.5/weather?lat=\(location.coordinate.latitude)&lon=\(location.coordinate.longitude)&appid=\(openWeatherMapApiKey)&units=metric&lang=kr"
         
         fetch(urlStr: urlStr, completion: completion)
@@ -175,6 +197,12 @@ extension WeatherDataSource {
 extension WeatherDataSource {
     private func fetchAccuWeatherLocationKey(location: CLLocation, completion: @escaping(Result<LocationKey, Error>) -> ()) {
         let urlStr = "http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=\(accuWeatherApiKey)&q=\(location.coordinate.latitude)%2C%20\(location.coordinate.longitude)&language=ko-kr"
+        
+        fetch(urlStr: urlStr, completion: completion)
+    }
+    
+    private func fetchAccuWeatherCurrentWeather(locationKey: String, completion: @escaping(Result<[AccuWeatherCurrentWeather], Error>) -> ()) {
+        let urlStr = "http://dataservice.accuweather.com/currentconditions/v1/\(Int(locationKey)!)?apikey=\(accuWeatherApiKey)&language=ko-kr"
         
         fetch(urlStr: urlStr, completion: completion)
     }

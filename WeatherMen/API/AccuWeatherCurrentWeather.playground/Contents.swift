@@ -1,7 +1,7 @@
 import UIKit
 import CoreLocation
 
-struct CurrentWeather: Codable {
+struct AccuWeatherCurrentWeather: Codable {
     let EpochTime: Int
     let WeatherText: String
     
@@ -71,7 +71,7 @@ func fetchAccuWeatherLocationKey(location: CLLocation, completion: @escaping(Res
     fetch(urlStr: urlStr, completion: completion)
 }
 
-func fetchAccuWeatherCurrentWeather(locationKey: String, completion: @escaping(Result<[CurrentWeather], Error>) -> ()) {
+func fetchAccuWeatherCurrentWeather(locationKey: String, completion: @escaping(Result<[AccuWeatherCurrentWeather], Error>) -> ()) {
     let urlStr = "http://dataservice.accuweather.com/currentconditions/v1/\(Int(locationKey)!)?apikey=\(accuWeatherApiKey)&language=ko-kr"
     
     fetch(urlStr: urlStr, completion: completion)
