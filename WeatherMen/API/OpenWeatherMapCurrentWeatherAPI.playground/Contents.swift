@@ -1,7 +1,7 @@
 import UIKit
 import CoreLocation
 
-struct CurrentWeather: Codable {
+struct OpenWeatherMapCurrentWeather: Codable {
     
     let dt: Int
     
@@ -80,27 +80,27 @@ func fetch<ParsingType: Codable>(urlStr: String, completion: @escaping (Result<P
     task.resume()
 }
 
-func fetchCurrentWeather(cityName: String, completion: @escaping (Result<CurrentWeather, Error>) -> ()) {
+func fetchOpenWeatherMapCurrentWeather(cityName: String, completion: @escaping (Result<OpenWeatherMapCurrentWeather, Error>) -> ()) {
     let urlStr = "https://api.openweathermap.org/data/2.5/weather?q=\(cityName)&appid=9bb607c5051f148d38ced029dd8953fd&units=metric&lang=kr"
     
     fetch(urlStr: urlStr, completion: completion)
 }
 
-func fetchCurrentWeather(cityID: Int, completion: @escaping (Result<CurrentWeather, Error>) -> ()) {
+func fetchOpenWeatherMapCurrentWeather(cityID: Int, completion: @escaping (Result<OpenWeatherMapCurrentWeather, Error>) -> ()) {
     let urlStr = "https://api.openweathermap.org/data/2.5/weather?id=\(cityID)&appid=9bb607c5051f148d38ced029dd8953fd&units=metric&lang=kr"
     
     fetch(urlStr: urlStr, completion: completion)
 }
 
-func fetchCurrentWeather(location: CLLocation, completion: @escaping (Result<CurrentWeather, Error>) -> ()) {
+func fetchOpenWeatherMapCurrentWeather(location: CLLocation, completion: @escaping (Result<OpenWeatherMapCurrentWeather, Error>) -> ()) {
     let urlStr = "https://api.openweathermap.org/data/2.5/weather?lat=\(location.coordinate.latitude)&lon=\(location.coordinate.longitude)&appid=9bb607c5051f148d38ced029dd8953fd&units=metric&lang=kr"
     
     fetch(urlStr: urlStr, completion: completion)
 }
 
-//fetchCurrentWeather(cityName: "seoul") { _ in }
+//fetchOpenWeatherMapCurrentWeather(cityName: "seoul") { _ in }
 
-/*fetchCurrentWeather(cityID: 1835847) { (result) in
+/*fetchOpenWeatherMapCurrentWeather(cityID: 1835847) { (result) in
     switch result {
     case .success(let weather):
         dump(weather)
@@ -110,7 +110,7 @@ func fetchCurrentWeather(location: CLLocation, completion: @escaping (Result<Cur
 }*/
 
 let location = CLLocation(latitude: 37.350018, longitude: 127.108908)
-fetchCurrentWeather(location: location) { (result) in
+fetchOpenWeatherMapCurrentWeather(location: location) { (result) in
     switch result {
     case .success(let weather):
         dump(weather)
