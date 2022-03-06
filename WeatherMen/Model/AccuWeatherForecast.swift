@@ -20,6 +20,7 @@ struct LocationKey: Codable {
 
 struct AccuWeatherForecast: Codable {
     let EpochDateTime: Int
+    let WeatherIcon: Int
     let IconPhrase: String
     
     struct Temperature: Codable {
@@ -27,6 +28,8 @@ struct AccuWeatherForecast: Codable {
     }
     
     let Temperature: Temperature
+    
+    let PrecipitationProbability: Int
 }
 
 struct AccuWeatherForecastData {

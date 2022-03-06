@@ -69,7 +69,8 @@ class WeatherDataSource {
                         
                         return OpenWeatherMapForecastData(date: dt, icon: icon, weather: weather, temperature: temperature)
                     }
-                    self.openWeatherMapForecastList.removeLast(36)
+                    self.openWeatherMapForecastList.removeFirst(1)
+                    self.openWeatherMapForecastList.removeLast(35)
                 default:
                     self.openWeatherMapForecastList = []
                 }
