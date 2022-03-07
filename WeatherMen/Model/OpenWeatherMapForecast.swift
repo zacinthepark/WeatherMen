@@ -32,4 +32,5 @@ struct OpenWeatherMapForecastData {
     let icon: String
     let weather: String
     let temperature: Double
+    let precipitationProbability: Double
 }
