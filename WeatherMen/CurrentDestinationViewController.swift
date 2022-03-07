@@ -56,7 +56,7 @@ extension CurrentDestinationViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         
-        return 2
+        return 3
         
     }
     
@@ -66,6 +66,8 @@ extension CurrentDestinationViewController: UITableViewDataSource {
         case 0:
             return 1
         case 1:
+            return 1
+        case 2:
             return WeatherDataSource.shared.openWeatherMapForecastList.count
         default:
             return 0
@@ -85,6 +87,18 @@ extension CurrentDestinationViewController: UITableViewDataSource {
                 cell.minLabel.text = "최소 \(main.temp_min.temperatureString)"
                 cell.currentTemperatureLabel.text = "\(main.temp.temperatureString)"
             }
+            
+            return cell
+        }
+        
+        if indexPath.section == 1 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "WeatherSourceTableViewCell", for: indexPath) as! WeatherSourceTableViewCell
+            
+            cell.fromLabel.text = "출처:"
+            cell.weatherSourceImageView1.image = UIImage(named: "openweathermapicon")
+            cell.weatherSourceLabel1.text = "openweathermap"
+            cell.weatherSourceImageView2.image = UIImage(named: "accuweathericon")
+            cell.weatherSourceLabel2.text = "accuweather"
             
             return cell
         }
