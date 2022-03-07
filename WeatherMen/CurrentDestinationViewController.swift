@@ -105,15 +105,61 @@ extension CurrentDestinationViewController: UITableViewDataSource {
     
         let cell = tableView.dequeueReusableCell(withIdentifier: "ForecastTableViewCell", for: indexPath) as! ForecastTableViewCell
         
-        let target = WeatherDataSource.shared.openWeatherMapForecastList[indexPath.row]
-        cell.dateLabel.text = target.date.dateString
-        cell.timeLabel.text = target.date.timeString
-        cell.weatherImageView.image = UIImage(named: target.icon)
-        cell.statusLabel.text = target.weather
-        cell.temperatureLabel.text = target.temperature.temperatureString
+        let target1 = WeatherDataSource.shared.openWeatherMapForecastList[indexPath.row]
+        cell.dateLabel.text = target1.date.dateString
+        cell.timeLabel.text = target1.date.timeString
+        cell.weatherImageView1.image = UIImage(named: target1.icon)
+        cell.temperatureLabel1.text = target1.temperature.temperatureString
+        cell.sourceImageView1.image = UIImage(named: "openweathermapicon")
+        cell.statusLabel1.text = target1.weather
+        
+        let target2 = WeatherDataSource.shared.accuWeatherForeacstList[indexPath.row]
+        cell.weatherImageView2.image = UIImage(named: convertAccuWeatherIconToOpenWeatherMap(weatherIcon: target2.icon))
+        cell.temperatureLabel2.text = target2.temperature.temperatureString
+        cell.sourceImageView2.image = UIImage(named: "accuweathericon")
+        cell.statusLabel2.text = target2.weather
             
         return cell
     
     }
     
+}
+
+extension CurrentDestinationViewController {
+    private func convertAccuWeatherIconToOpenWeatherMap(weatherIcon: Int) -> String {
+        switch weatherIcon {
+        case 1,2,30,31,32:
+            return "01d"
+        case 33,34:
+            return "01n"
+        case 3,4,5:
+            return "02d"
+        case 35,36,37:
+            return "02n"
+        case 6,7:
+            return "03d"
+        case 38:
+            return "03n"
+        case 8:
+            return "04d"
+        case 12,13,14,26,29:
+            return "09d"
+        case 39,40:
+            return "09n"
+        case 18:
+            return "10d"
+        case 15,16,17:
+            return "11d"
+        case 41,42:
+            return "11n"
+        case 19,20,21,22,23,24,25:
+            return "13d"
+        case 43,44:
+            return "13n"
+        case 11:
+            return "50d"
+        default:
+            return ""
+        }
+    }
 }

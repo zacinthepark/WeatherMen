@@ -34,6 +34,7 @@ struct AccuWeatherForecast: Codable {
 
 struct AccuWeatherForecastData {
     let date: Date
+    let icon: Int
     let weather: String
     let temperature: Double
 }

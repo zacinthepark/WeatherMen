@@ -66,8 +66,9 @@ class WeatherDataSource {
                         let icon = $0.weather.first?.icon ?? ""
                         let weather = $0.weather.first?.description ?? "알 수 없음"
                         let temperature = $0.temp
+                        let precipitationProbability = $0.pop
                         
-                        return OpenWeatherMapForecastData(date: dt, icon: icon, weather: weather, temperature: temperature)
+                        return OpenWeatherMapForecastData(date: dt, icon: icon, weather: weather, temperature: temperature, precipitationProbability: precipitationProbability)
                     }
                     self.openWeatherMapForecastList.removeFirst(1)
                     self.openWeatherMapForecastList.removeLast(35)
@@ -109,10 +110,11 @@ class WeatherDataSource {
                         case .success(let data):
                             self.accuWeatherForeacstList = data.map {
                                 let dt = Date(timeIntervalSince1970: TimeInterval($0.EpochDateTime))
+                                let icon = $0.WeatherIcon
                                 let weather = $0.IconPhrase
                                 let temperature = $0.Temperature.Value
                                 
-                                return AccuWeatherForecastData(date: dt, weather: weather, temperature: temperature)
+                                return AccuWeatherForecastData(date: dt, icon: icon, weather: weather, temperature: temperature)
                             }
                         default: self.accuWeatherForeacstList = []
                         }
