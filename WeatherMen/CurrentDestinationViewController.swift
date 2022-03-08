@@ -70,7 +70,7 @@ extension CurrentDestinationViewController: UITableViewDataSource {
         case 1:
             return 1
         case 2:
-            return WeatherDataSource.shared.openWeatherMapForecastList.count
+            return WeatherDataSource.shared.accuWeatherForeacstList.count
         default:
             return 0
         }

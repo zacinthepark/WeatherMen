@@ -25,9 +25,7 @@ class WeatherDataSource {
     
     static let weatherInfoDidUpdate = Notification.Name(rawValue: "weatherInfoDidUpdate")
     
-    //현재 날씨 저장
     var summary: OpenWeatherMapCurrentWeather?
-    //예보 데이터 저장
     var openWeatherMapForecastList = [OpenWeatherMapForecastData]()
     var accuWeatherCurrentWeather: AccuWeatherCurrentWeather?
     var accuWeatherForeacstList = [AccuWeatherForecastData]()
