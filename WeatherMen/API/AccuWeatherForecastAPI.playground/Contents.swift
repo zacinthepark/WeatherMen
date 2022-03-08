@@ -1,26 +1,26 @@
 import UIKit
 import CoreLocation
 
-struct CurrentWeather: Codable {
+struct LocationKey: Codable {
+    let Key: String
     
-    let dt: Int
-    
-    struct Weather: Codable {
-        let id: Int
-        let main: String
-        let description: String
-        let icon: String
+    struct GeoPosition: Codable {
+        let Latitude: Double
+        let Longitude: Double
     }
     
-    let weather: [Weather]
+    let GeoPosition: GeoPosition
+}
+
+struct AccuWeatherForecast: Codable {
+    let EpochDateTime: Int
+    let IconPhrase: String
     
-    struct Main: Codable {
-        let temp: Double
-        let temp_min: Double
-        let temp_max: Double
+    struct Temperature: Codable {
+        let Value: Double
     }
     
-    let main: Main
+    let Temperature: Temperature
     
 }
 
@@ -80,43 +80,31 @@ func fetch<ParsingType: Codable>(urlStr: String, completion: @escaping (Result<P
     task.resume()
 }
 
-func fetchCurrentWeather(cityName: String, completion: @escaping (Result<CurrentWeather, Error>) -> ()) {
-    let urlStr = "https://api.openweathermap.org/data/2.5/weather?q=\(cityName)&appid=9bb607c5051f148d38ced029dd8953fd&units=metric&lang=kr"
+func fetchAccuWeatherLocationKey(location: CLLocation, completion: @escaping(Result<LocationKey, Error>) -> ()) {
+    let urlStr = "http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=\(accuWeatherApiKey)&q=\(location.coordinate.latitude)%2C%20\(location.coordinate.longitude)&language=ko-kr"
     
     fetch(urlStr: urlStr, completion: completion)
 }
-
-func fetchCurrentWeather(cityID: Int, completion: @escaping (Result<CurrentWeather, Error>) -> ()) {
-    let urlStr = "https://api.openweathermap.org/data/2.5/weather?id=\(cityID)&appid=9bb607c5051f148d38ced029dd8953fd&units=metric&lang=kr"
-    
-    fetch(urlStr: urlStr, completion: completion)
-}
-
-func fetchCurrentWeather(location: CLLocation, completion: @escaping (Result<CurrentWeather, Error>) -> ()) {
-    let urlStr = "https://api.openweathermap.org/data/2.5/weather?lat=\(location.coordinate.latitude)&lon=\(location.coordinate.longitude)&appid=9bb607c5051f148d38ced029dd8953fd&units=metric&lang=kr"
-    
-    fetch(urlStr: urlStr, completion: completion)
-}
-
-//fetchCurrentWeather(cityName: "seoul") { _ in }
-
-/*fetchCurrentWeather(cityID: 1835847) { (result) in
-    switch result {
-    case .success(let weather):
-        dump(weather)
-    case .failure(let error):
-        print(error)
-    }
-}*/
 
 let location = CLLocation(latitude: 37.350018, longitude: 127.108908)
-fetchCurrentWeather(location: location) { (result) in
-    switch result {
-    case .success(let weather):
-        dump(weather)
-    case .failure(let error):
-        print(error)
-    }
+
+func fetchAccuWeatherForecast(locationKey: String, completion: @escaping(Result<[AccuWeatherForecast], Error>) -> ()) {
+    let urlStr = "http://dataservice.accuweather.com/forecasts/v1/hourly/12hour/\(Int(locationKey)!)?apikey=\(accuWeatherApiKey)&language=ko-kr&metric=true"
+    
+    fetch(urlStr: urlStr, completion: completion)
 }
 
+fetchAccuWeatherLocationKey(location: location) { (result) in
+    switch result {
+    case .success(let locationKey):
+        fetchAccuWeatherForecast(locationKey: locationKey.Key) { (result) in
+            switch result {
+            case .success(let data):
+                dump(data)
+            default: break
+            }
+        }
+    default: break
+    }
+}
 

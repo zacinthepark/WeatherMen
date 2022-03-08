@@ -17,6 +17,7 @@ class CurrentDestinationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        locationLabel.alpha = 0.0
         listTableView.alpha = 0.0
         loader.alpha = 1.0
         
@@ -33,6 +34,7 @@ class CurrentDestinationViewController: UIViewController {
             self.locationLabel.text = LocationManager.shared.currentLocationTitle
             
             UIView.animate(withDuration: 0.3) {
+                self.locationLabel.alpha = 1.0
                 self.listTableView.alpha = 1.0
                 self.loader.alpha = 0.0
             }
@@ -56,7 +58,7 @@ extension CurrentDestinationViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         
-        return 2
+        return 3
         
     }
     
@@ -66,7 +68,9 @@ extension CurrentDestinationViewController: UITableViewDataSource {
         case 0:
             return 1
         case 1:
-            return WeatherDataSource.shared.forecastList.count
+            return 1
+        case 2:
+            return WeatherDataSource.shared.openWeatherMapForecastList.count
         default:
             return 0
         }
@@ -81,24 +85,83 @@ extension CurrentDestinationViewController: UITableViewDataSource {
             if let weather = WeatherDataSource.shared.summary?.weather.first, let main = WeatherDataSource.shared.summary?.main {
                 cell.weatherImageView.image = UIImage(named: weather.icon)
                 cell.statusLabel.text = weather.description
-                cell.minMaxLabel.text = "최고\(main.temp_max.temperatureString) 최소\(main.temp_min.temperatureString)"
+                cell.maxLabel.text = "최고 \(main.temp_max.temperatureString)"
+                cell.minLabel.text = "최소 \(main.temp_min.temperatureString)"
                 cell.currentTemperatureLabel.text = "\(main.temp.temperatureString)"
             }
+            
+            return cell
+        }
+        
+        if indexPath.section == 1 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "WeatherSourceTableViewCell", for: indexPath) as! WeatherSourceTableViewCell
+            
+            cell.fromLabel.text = "출처:"
+            cell.weatherSourceImageView1.image = UIImage(named: "openweathermapicon")
+            cell.weatherSourceLabel1.text = "openweathermap"
+            cell.weatherSourceImageView2.image = UIImage(named: "accuweathericon")
+            cell.weatherSourceLabel2.text = "accuweather"
             
             return cell
         }
     
         let cell = tableView.dequeueReusableCell(withIdentifier: "ForecastTableViewCell", for: indexPath) as! ForecastTableViewCell
         
-        let target = WeatherDataSource.shared.forecastList[indexPath.row]
-        cell.dateLabel.text = target.date.dateString
-        cell.timeLabel.text = target.date.timeString
-        cell.weatherImageView.image = UIImage(named: target.icon)
-        cell.statusLabel.text = target.weather
-        cell.temperatureLabel.text = target.temperature.temperatureString
+        let target1 = WeatherDataSource.shared.openWeatherMapForecastList[indexPath.row]
+        cell.dateLabel.text = target1.date.dateString
+        cell.timeLabel.text = target1.date.timeString
+        cell.weatherImageView1.image = UIImage(named: target1.icon)
+        cell.temperatureLabel1.text = target1.temperature.temperatureString
+        cell.sourceImageView1.image = UIImage(named: "openweathermapicon")
+        cell.statusLabel1.text = target1.weather
+        
+        let target2 = WeatherDataSource.shared.accuWeatherForeacstList[indexPath.row]
+        cell.weatherImageView2.image = UIImage(named: convertAccuWeatherIconToOpenWeatherMap(weatherIcon: target2.icon))
+        cell.temperatureLabel2.text = target2.temperature.temperatureString
+        cell.sourceImageView2.image = UIImage(named: "accuweathericon")
+        cell.statusLabel2.text = target2.weather
             
         return cell
     
     }
     
+}
+
+extension CurrentDestinationViewController {
+    private func convertAccuWeatherIconToOpenWeatherMap(weatherIcon: Int) -> String {
+        switch weatherIcon {
+        case 1,2,30,31,32:
+            return "01d"
+        case 33,34:
+            return "01n"
+        case 3,4,5:
+            return "02d"
+        case 35,36,37:
+            return "02n"
+        case 6,7:
+            return "03d"
+        case 38:
+            return "03n"
+        case 8:
+            return "04d"
+        case 12,13,14,26,29:
+            return "09d"
+        case 39,40:
+            return "09n"
+        case 18:
+            return "10d"
+        case 15,16,17:
+            return "11d"
+        case 41,42:
+            return "11n"
+        case 19,20,21,22,23,24,25:
+            return "13d"
+        case 43,44:
+            return "13n"
+        case 11:
+            return "50d"
+        default:
+            return ""
+        }
+    }
 }

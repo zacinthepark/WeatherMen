@@ -7,19 +7,14 @@
 
 import Foundation
 
-struct Forecast: Codable {
-    let cod: String
-    let message: Int
-    let cnt: Int
+struct OpenWeatherMapForecast: Codable {
+    let lat: Double
+    let lon: Double
     
-    struct ListItem: Codable {
+    struct Hourly: Codable {
         let dt: Int
-        
-        struct Main: Codable {
-            let temp: Double
-        }
-        
-        let main: Main
+        let temp: Double
+        let pop: Double
         
         struct Weather: Codable {
             let description: String
@@ -29,12 +24,13 @@ struct Forecast: Codable {
         let weather: [Weather]
     }
     
-    let list: [ListItem]
+    let hourly: [Hourly]
 }
 
-struct ForecastData {
+struct OpenWeatherMapForecastData {
     let date: Date
     let icon: String
     let weather: String
     let temperature: Double
+    let precipitationProbability: Double
 }

@@ -26,12 +26,14 @@ class WeatherDataSource {
     static let weatherInfoDidUpdate = Notification.Name(rawValue: "weatherInfoDidUpdate")
     
     //현재 날씨 저장
-    var summary: CurrentWeather?
+    var summary: OpenWeatherMapCurrentWeather?
     //예보 데이터 저장
-    var forecastList = [ForecastData]()
+    var openWeatherMapForecastList = [OpenWeatherMapForecastData]()
+    var accuWeatherCurrentWeather: AccuWeatherCurrentWeather?
+    var accuWeatherForeacstList = [AccuWeatherForecastData]()
     
     //Api 요청할 때 사용할 DispatchQueue 저장 / .concurrent 옵션 추가하여 최대한 많은 작업 동시에 처리
-    let openWeatherMapApiQueue = DispatchQueue(label: "OpenWeatherMapApiQueue", attributes: .concurrent)
+    let weatherApiQueue = DispatchQueue(label: "WeatherApiQueue", attributes: .concurrent)
     
     //DispatchGroup은 2개의 Api 요청을 하나의 논리적인 그룹으로 묶어줄 때 사용
     let group = DispatchGroup()
@@ -41,8 +43,8 @@ class WeatherDataSource {
     //좌표를 받는 버전
     func fetch(location: CLLocation, completion: @escaping () -> ()) {
         group.enter()
-        openWeatherMapApiQueue.async {
-            self.fetchCurrentWeather(location: location) { (result) in
+        weatherApiQueue.async {
+            self.fetchOpenWeatherMapCurrentWeather(location: location) { (result) in
                 switch result {
                 case .success(let data):
                     self.summary = data
@@ -55,23 +57,73 @@ class WeatherDataSource {
         }
         
         group.enter()
-        openWeatherMapApiQueue.async {
-            self.fetchForecast(location: location) { (result) in
+        weatherApiQueue.async {
+            self.fetchOpenWeatherMapForecast(location: location) { (result) in
                 switch result {
                 case .success(let data):
-                    self.forecastList = data.list.map {
+                    self.openWeatherMapForecastList = data.hourly.map {
                         let dt = Date(timeIntervalSince1970: TimeInterval($0.dt))
                         let icon = $0.weather.first?.icon ?? ""
                         let weather = $0.weather.first?.description ?? "알 수 없음"
-                        let temperature = $0.main.temp
+                        let temperature = $0.temp
+                        let precipitationProbability = $0.pop
                         
-                        return ForecastData(date: dt, icon: icon, weather: weather, temperature: temperature)
+                        return OpenWeatherMapForecastData(date: dt, icon: icon, weather: weather, temperature: temperature, precipitationProbability: precipitationProbability)
                     }
+                    self.openWeatherMapForecastList.removeFirst(1)
+                    self.openWeatherMapForecastList.removeLast(35)
                 default:
-                    self.forecastList = []
+                    self.openWeatherMapForecastList = []
                 }
                 
                 self.group.leave()
+            }
+        }
+        
+        group.enter()
+        weatherApiQueue.async {
+            self.fetchAccuWeatherLocationKey(location: location) { (result) in
+                switch result {
+                case .success(let locationKey):
+                    self.fetchAccuWeatherCurrentWeather(locationKey: locationKey.Key) { (result) in
+                        switch result {
+                        case . success(let data):
+                            self.accuWeatherCurrentWeather = data.first
+                        default:
+                            self.accuWeatherCurrentWeather = nil
+                        }
+                    }
+                default: self.accuWeatherCurrentWeather = nil
+                }
+                
+                self.group.leave()
+            }
+        }
+        
+        group.enter()
+        weatherApiQueue.async {
+            self.fetchAccuWeatherLocationKey(location: location) { (result) in
+                switch result {
+                case .success(let locationKey):
+                    self.fetchAccuWeatherForecast(locationKey: locationKey.Key) { (result) in
+                        switch result {
+                        case .success(let data):
+                            self.accuWeatherForeacstList = data.map {
+                                let dt = Date(timeIntervalSince1970: TimeInterval($0.EpochDateTime))
+                                let icon = $0.WeatherIcon
+                                let weather = $0.IconPhrase
+                                let temperature = $0.Temperature.Value
+                                
+                                return AccuWeatherForecastData(date: dt, icon: icon, weather: weather, temperature: temperature)
+                            }
+                        default: self.accuWeatherForeacstList = []
+                        }
+                    }
+                default: self.accuWeatherForeacstList = []
+                }
+                
+                self.group.leave()
+                
             }
         }
         
@@ -129,41 +181,37 @@ extension WeatherDataSource {
         
         task.resume()
     }
-    
-    private func fetchCurrentWeather(cityName: String, completion: @escaping (Result<CurrentWeather, Error>) -> ()) {
-        let urlStr = "https://api.openweathermap.org/data/2.5/weather?q=\(cityName)&appid=\(openWeatherMapApiKey)&units=metric&lang=kr"
-        
-        fetch(urlStr: urlStr, completion: completion)
-    }
+}
 
-    private func fetchCurrentWeather(cityID: Int, completion: @escaping (Result<CurrentWeather, Error>) -> ()) {
-        let urlStr = "https://api.openweathermap.org/data/2.5/weather?id=\(cityID)&appid=\(openWeatherMapApiKey)&units=metric&lang=kr"
-        
-        fetch(urlStr: urlStr, completion: completion)
-    }
-
-    private func fetchCurrentWeather(location: CLLocation, completion: @escaping (Result<CurrentWeather, Error>) -> ()) {
+extension WeatherDataSource {
+    private func fetchOpenWeatherMapCurrentWeather(location: CLLocation, completion: @escaping (Result<OpenWeatherMapCurrentWeather, Error>) -> ()) {
         let urlStr = "https://api.openweathermap.org/data/2.5/weather?lat=\(location.coordinate.latitude)&lon=\(location.coordinate.longitude)&appid=\(openWeatherMapApiKey)&units=metric&lang=kr"
+        
+        fetch(urlStr: urlStr, completion: completion)
+    }
+    
+    private func fetchOpenWeatherMapForecast(location: CLLocation, completion: @escaping (Result<OpenWeatherMapForecast, Error>) -> ()) {
+        let urlStr = "https://api.openweathermap.org/data/2.5/onecall?lat=\(location.coordinate.latitude)&lon=\(location.coordinate.longitude)&exclude=current,minutely,daily,alerts&appid=\(openWeatherMapApiKey)&units=metric&lang=kr"
         
         fetch(urlStr: urlStr, completion: completion)
     }
 }
 
 extension WeatherDataSource {
-    private func fetchForecast(cityName: String, completion: @escaping (Result<Forecast, Error>) -> ()) {
-        let urlStr = "https://api.openweathermap.org/data/2.5/forecast?q=\(cityName)&appid=\(openWeatherMapApiKey)&units=metric&lang=kr"
+    private func fetchAccuWeatherLocationKey(location: CLLocation, completion: @escaping(Result<LocationKey, Error>) -> ()) {
+        let urlStr = "http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=\(accuWeatherApiKey)&q=\(location.coordinate.latitude)%2C%20\(location.coordinate.longitude)&language=ko-kr"
         
         fetch(urlStr: urlStr, completion: completion)
     }
-
-    private func fetchForecast(cityID: Int, completion: @escaping (Result<Forecast, Error>) -> ()) {
-        let urlStr = "https://api.openweathermap.org/data/2.5/forecast?id=\(cityID)&appid=\(openWeatherMapApiKey)&units=metric&lang=kr"
+    
+    private func fetchAccuWeatherCurrentWeather(locationKey: String, completion: @escaping(Result<[AccuWeatherCurrentWeather], Error>) -> ()) {
+        let urlStr = "http://dataservice.accuweather.com/currentconditions/v1/\(Int(locationKey)!)?apikey=\(accuWeatherApiKey)&language=ko-kr"
         
         fetch(urlStr: urlStr, completion: completion)
     }
-
-    private func fetchForecast(location: CLLocation, completion: @escaping (Result<Forecast, Error>) -> ()) {
-        let urlStr = "https://api.openweathermap.org/data/2.5/forecast?lat=\(location.coordinate.latitude)&lon=\(location.coordinate.longitude)&appid=\(openWeatherMapApiKey)&units=metric&lang=kr"
+    
+    private func fetchAccuWeatherForecast(locationKey: String, completion: @escaping(Result<[AccuWeatherForecast], Error>) -> ()) {
+        let urlStr = "http://dataservice.accuweather.com/forecasts/v1/hourly/12hour/\(Int(locationKey)!)?apikey=\(accuWeatherApiKey)&language=ko-kr&metric=true"
         
         fetch(urlStr: urlStr, completion: completion)
     }
