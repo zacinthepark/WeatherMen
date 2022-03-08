@@ -17,6 +17,7 @@ class CurrentDestinationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        locationLabel.alpha = 0.0
         listTableView.alpha = 0.0
         loader.alpha = 1.0
         
@@ -33,6 +34,7 @@ class CurrentDestinationViewController: UIViewController {
             self.locationLabel.text = LocationManager.shared.currentLocationTitle
             
             UIView.animate(withDuration: 0.3) {
+                self.locationLabel.alpha = 1.0
                 self.listTableView.alpha = 1.0
                 self.loader.alpha = 0.0
             }
