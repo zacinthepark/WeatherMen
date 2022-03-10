@@ -55,15 +55,11 @@ class CurrentDestinationViewController: UIViewController {
 }
 
 extension CurrentDestinationViewController: UITableViewDataSource {
-    
     func numberOfSections(in tableView: UITableView) -> Int {
-        
         return 3
-        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         switch section {
         case 0:
             return 1
@@ -74,11 +70,9 @@ extension CurrentDestinationViewController: UITableViewDataSource {
         default:
             return 0
         }
-        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "SummaryTableViewCell", for: indexPath) as! SummaryTableViewCell
             
@@ -112,19 +106,30 @@ extension CurrentDestinationViewController: UITableViewDataSource {
         cell.timeLabel.text = target1.date.timeString
         cell.weatherImageView1.image = UIImage(named: target1.icon)
         cell.temperatureLabel1.text = target1.temperature.temperatureString
-        cell.sourceImageView1.image = UIImage(named: "openweathermapicon")
-        cell.statusLabel1.text = target1.weather
+        if isRainyOpenWeatherMap(icon: target1.icon) {
+            cell.precipitationPercentLabel1.isHidden = false
+            cell.precipitationPercentLabel1.text = target1.precipitationProbability.percentString
+        } else {
+            cell.precipitationPercentLabel1.isHidden = true
+        }
+        //cell.sourceImageView1.image = UIImage(named: "openweathermapicon")
+        //cell.statusLabel1.text = target1.weather
         
         let target2 = WeatherDataSource.shared.accuWeatherForeacstList[indexPath.row]
         cell.weatherImageView2.image = UIImage(named: convertAccuWeatherIconToOpenWeatherMap(weatherIcon: target2.icon))
         cell.temperatureLabel2.text = target2.temperature.temperatureString
-        cell.sourceImageView2.image = UIImage(named: "accuweathericon")
-        cell.statusLabel2.text = target2.weather
+        if isRainyAccuWeather(icon: target2.icon) {
+            cell.precipitationPercentLabel2.isHidden = false
+            let doublePop = Double(target2.precipitationProbability / 100)
+            cell.precipitationPercentLabel2.text = doublePop.percentString
+        } else {
+            cell.precipitationPercentLabel2.isHidden = true
+        }
+        //cell.sourceImageView2.image = UIImage(named: "accuweathericon")
+        //cell.statusLabel2.text = target2.weather
             
         return cell
-    
     }
-    
 }
 
 extension CurrentDestinationViewController {
@@ -162,6 +167,25 @@ extension CurrentDestinationViewController {
             return "50d"
         default:
             return ""
+        }
+    }
+    
+    private func isRainyOpenWeatherMap(icon: String) -> Bool {
+        let rainyIcons = ["09d", "09n", "10d", "10n", "11d", "11n"]
+        if rainyIcons.contains(icon) {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    private func isRainyAccuWeather(icon: Int) -> Bool {
+        let stringIcon = convertAccuWeatherIconToOpenWeatherMap(weatherIcon: icon)
+        let rainyIcons = ["09d", "09n", "10d", "10n", "11d", "11n"]
+        if rainyIcons.contains(stringIcon) {
+            return true
+        } else {
+            return false
         }
     }
 }

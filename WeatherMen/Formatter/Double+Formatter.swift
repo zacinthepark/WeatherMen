@@ -16,9 +16,21 @@ fileprivate let temperatureFormatter: MeasurementFormatter = {
     return f
 }()
 
+fileprivate let numberFormatter: NumberFormatter = {
+    let f = NumberFormatter()
+    f.numberStyle = .percent
+    f.locale = Locale(identifier: "ko_kr")
+    return f
+}()
+
 extension Double {
     var temperatureString: String {
         let temp = Measurement<UnitTemperature>(value: self, unit: .celsius)
         return temperatureFormatter.string(from: temp)
+    }
+    
+    var percentString: String {
+        let pop = NSNumber(value: self)
+        return numberFormatter.string(from: pop) ?? ""
     }
 }
