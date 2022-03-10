@@ -111,8 +111,9 @@ class WeatherDataSource {
                                 let icon = $0.WeatherIcon
                                 let weather = $0.IconPhrase
                                 let temperature = $0.Temperature.Value
+                                let precipitationProbability = $0.PrecipitationProbability
                                 
-                                return AccuWeatherForecastData(date: dt, icon: icon, weather: weather, temperature: temperature)
+                                return AccuWeatherForecastData(date: dt, icon: icon, weather: weather, temperature: temperature, precipitationProbability: precipitationProbability)
                             }
                         default: self.accuWeatherForeacstList = []
                         }

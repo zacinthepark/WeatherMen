@@ -37,4 +37,5 @@ struct AccuWeatherForecastData {
     let icon: Int
     let weather: String
     let temperature: Double
+    let precipitationProbability: Int
 }
