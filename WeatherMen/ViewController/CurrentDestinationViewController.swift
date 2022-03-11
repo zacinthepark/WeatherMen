@@ -13,11 +13,13 @@ class CurrentDestinationViewController: UIViewController {
     @IBOutlet weak var loader: UIActivityIndicatorView!
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var listTableView: UITableView!
+    @IBOutlet weak var reloadLocationButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         locationLabel.alpha = 0.0
+        reloadLocationButton.alpha = 0.0
         listTableView.alpha = 0.0
         loader.alpha = 1.0
         
@@ -36,6 +38,7 @@ class CurrentDestinationViewController: UIViewController {
             UIView.animate(withDuration: 0.3) {
                 self.locationLabel.alpha = 1.0
                 self.listTableView.alpha = 1.0
+                self.reloadLocationButton.alpha = 1.0
                 self.loader.alpha = 0.0
             }
         }
@@ -66,7 +69,7 @@ extension CurrentDestinationViewController: UITableViewDataSource {
         case 1:
             return 1
         case 2:
-            return WeatherDataSource.shared.accuWeatherForeacstList.count
+            return WeatherDataSource.shared.accuWeatherForecastList.count
         default:
             return 0
         }
@@ -115,7 +118,7 @@ extension CurrentDestinationViewController: UITableViewDataSource {
         //cell.sourceImageView1.image = UIImage(named: "openweathermapicon")
         //cell.statusLabel1.text = target1.weather
         
-        let target2 = WeatherDataSource.shared.accuWeatherForeacstList[indexPath.row]
+        let target2 = WeatherDataSource.shared.accuWeatherForecastList[indexPath.row]
         cell.weatherImageView2.image = UIImage(named: convertAccuWeatherIconToOpenWeatherMap(weatherIcon: target2.icon))
         cell.temperatureLabel2.text = target2.temperature.temperatureString
         if isRainyAccuWeather(icon: target2.icon) {
@@ -187,5 +190,11 @@ extension CurrentDestinationViewController {
         } else {
             return false
         }
+    }
+}
+
+extension CurrentDestinationViewController {
+    @IBAction func reloadLocation(_ sender: UIButton) {
+        LocationManager.shared.updateLocation()
     }
 }

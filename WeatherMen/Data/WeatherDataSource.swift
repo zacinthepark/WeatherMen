@@ -28,7 +28,7 @@ class WeatherDataSource {
     var summary: OpenWeatherMapCurrentWeather?
     var openWeatherMapForecastList = [OpenWeatherMapForecastData]()
     var accuWeatherCurrentWeather: AccuWeatherCurrentWeather?
-    var accuWeatherForeacstList = [AccuWeatherForecastData]()
+    var accuWeatherForecastList = [AccuWeatherForecastData]()
     
     //Api 요청할 때 사용할 DispatchQueue 저장 / .concurrent 옵션 추가하여 최대한 많은 작업 동시에 처리
     let weatherApiQueue = DispatchQueue(label: "WeatherApiQueue", attributes: .concurrent)
@@ -106,7 +106,7 @@ class WeatherDataSource {
                     self.fetchAccuWeatherForecast(locationKey: locationKey.Key) { (result) in
                         switch result {
                         case .success(let data):
-                            self.accuWeatherForeacstList = data.map {
+                            self.accuWeatherForecastList = data.map {
                                 let dt = Date(timeIntervalSince1970: TimeInterval($0.EpochDateTime))
                                 let icon = $0.WeatherIcon
                                 let weather = $0.IconPhrase
@@ -115,10 +115,10 @@ class WeatherDataSource {
                                 
                                 return AccuWeatherForecastData(date: dt, icon: icon, weather: weather, temperature: temperature, precipitationProbability: precipitationProbability)
                             }
-                        default: self.accuWeatherForeacstList = []
+                        default: self.accuWeatherForecastList = []
                         }
                     }
-                default: self.accuWeatherForeacstList = []
+                default: self.accuWeatherForecastList = []
                 }
                 
                 self.group.leave()
