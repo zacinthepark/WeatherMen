@@ -20,20 +20,31 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="osl-10-NMY">
                                 <rect key="frame" x="0.0" y="44" width="414" height="60"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GKr-AA-ito">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="60"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GKr-AA-ito">
+                                        <rect key="frame" x="182" y="0.0" width="50" height="60"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OaQ-SO-npb">
+                                        <rect key="frame" x="247" y="0.0" width="167" height="60"/>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" image="paperplane.fill" catalog="system"/>
+                                        <connections>
+                                            <action selector="reloadLocation:" destination="MZB-1g-EEe" eventType="touchUpInside" id="RUa-qK-ViP"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="GKr-AA-ito" secondAttribute="trailing" id="G5E-o8-pHl"/>
-                                    <constraint firstItem="GKr-AA-ito" firstAttribute="top" secondItem="osl-10-NMY" secondAttribute="top" id="L5p-es-fU1"/>
+                                    <constraint firstAttribute="bottom" secondItem="OaQ-SO-npb" secondAttribute="bottom" id="5wy-ae-hxq"/>
+                                    <constraint firstItem="GKr-AA-ito" firstAttribute="top" secondItem="osl-10-NMY" secondAttribute="top" id="93U-Lf-Lz2"/>
+                                    <constraint firstAttribute="bottom" secondItem="GKr-AA-ito" secondAttribute="bottom" id="GOL-yW-gu7"/>
                                     <constraint firstAttribute="height" constant="60" id="LAZ-ME-z7E"/>
-                                    <constraint firstAttribute="bottom" secondItem="GKr-AA-ito" secondAttribute="bottom" id="Lcr-Ex-DXk"/>
-                                    <constraint firstItem="GKr-AA-ito" firstAttribute="leading" secondItem="osl-10-NMY" secondAttribute="leading" id="QiU-7n-jeO"/>
+                                    <constraint firstAttribute="trailing" secondItem="OaQ-SO-npb" secondAttribute="trailing" id="LPt-bX-6XF"/>
+                                    <constraint firstItem="GKr-AA-ito" firstAttribute="centerX" secondItem="osl-10-NMY" secondAttribute="centerX" id="bWX-eQ-Njo"/>
+                                    <constraint firstItem="OaQ-SO-npb" firstAttribute="top" secondItem="osl-10-NMY" secondAttribute="top" id="cbm-Jc-gjE"/>
+                                    <constraint firstItem="OaQ-SO-npb" firstAttribute="leading" secondItem="GKr-AA-ito" secondAttribute="trailing" constant="15" id="tA4-eZ-jOu"/>
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="uBR-mf-6s6">
@@ -57,7 +68,7 @@
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ndD-hX-xNf">
                                                     <rect key="frame" x="100" y="11" width="294" height="70"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                                    <color key="textColor" red="1" green="0.32025216080000002" blue="0.366344434" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                    <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <stackView opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="e0U-zK-zvI">
@@ -66,13 +77,13 @@
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6FG-dJ-OKC">
                                                             <rect key="frame" x="0.0" y="0.0" width="41.5" height="19.5"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                            <color key="textColor" red="1" green="0.51154164229999999" blue="0.92864183730000005" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                            <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y7C-hH-Xen">
                                                             <rect key="frame" x="0.0" y="19.5" width="41.5" height="19.5"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                            <color key="textColor" red="0.97181275339999995" green="0.54910652280000005" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                            <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                     </subviews>
@@ -80,7 +91,7 @@
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lnd-GC-Gje">
                                                     <rect key="frame" x="71.5" y="91" width="322.5" height="39"/>
                                                     <fontDescription key="fontDescription" type="system" weight="thin" pointSize="60"/>
-                                                    <color key="textColor" red="0.43250232856386162" green="0.83174662992439885" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                    <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -326,6 +337,7 @@
                         <outlet property="listTableView" destination="uBR-mf-6s6" id="ZG9-p2-450"/>
                         <outlet property="loader" destination="we4-lZ-265" id="DzO-Gv-sSN"/>
                         <outlet property="locationLabel" destination="GKr-AA-ito" id="Nuf-pE-w5f"/>
+                        <outlet property="reloadLocationButton" destination="OaQ-SO-npb" id="yFn-Z6-19b"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9rY-2k-xGj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -334,6 +346,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="paperplane.fill" catalog="system" width="128" height="118"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
