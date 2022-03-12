@@ -24,3 +24,8 @@ print(pop2.percentString)
 print(pop3.percentString)
 print(pop4.percentString)
 print(pop5.percentString)
+
+let int = 56
+let doubleInt = Double(int)
+let final = doubleInt / 100
+print(final)
