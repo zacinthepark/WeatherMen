@@ -123,8 +123,9 @@ extension CurrentDestinationViewController: UITableViewDataSource {
         cell.temperatureLabel2.text = target2.temperature.temperatureString
         if isRainyAccuWeather(icon: target2.icon) {
             cell.precipitationPercentLabel2.isHidden = false
-            let doublePop = Double(target2.precipitationProbability / 100)
-            cell.precipitationPercentLabel2.text = doublePop.percentString
+            let precipitationProbabilityDoubleType = Double(target2.precipitationProbability)
+            let pop = precipitationProbabilityDoubleType / 100
+            cell.precipitationPercentLabel2.text = pop.percentString
         } else {
             cell.precipitationPercentLabel2.isHidden = true
         }
