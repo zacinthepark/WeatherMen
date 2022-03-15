@@ -20,6 +20,7 @@ class CurrentDestinationViewController: UIViewController {
         
         locationLabel.alpha = 0.0
         reloadLocationButton.alpha = 0.0
+        reloadLocationButton.imageView?.image = UIImage(named: "refresh")?.withRenderingMode(.alwaysOriginal)
         listTableView.alpha = 0.0
         loader.alpha = 1.0
         
@@ -60,7 +61,7 @@ class CurrentDestinationViewController: UIViewController {
 
 extension CurrentDestinationViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
+        return 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -68,8 +69,6 @@ extension CurrentDestinationViewController: UITableViewDataSource {
         case 0:
             return 1
         case 1:
-            return 1
-        case 2:
             return WeatherDataSource.shared.accuWeatherForecastList.count
         default:
             return 0
@@ -90,20 +89,11 @@ extension CurrentDestinationViewController: UITableViewDataSource {
             
             return cell
         }
-        
-        if indexPath.section == 1 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "WeatherSourceTableViewCell", for: indexPath) as! WeatherSourceTableViewCell
-            
-            cell.fromLabel.text = "출처:"
-            cell.weatherSourceImageView1.image = UIImage(named: "openweathermapicon")
-            cell.weatherSourceLabel1.text = "openweathermap"
-            cell.weatherSourceImageView2.image = UIImage(named: "accuweathericon")
-            cell.weatherSourceLabel2.text = "accuweather"
-            
-            return cell
-        }
     
         let cell = tableView.dequeueReusableCell(withIdentifier: "ForecastTableViewCell", for: indexPath) as! ForecastTableViewCell
+        
+        cell.sourceButton1.imageView?.image = UIImage(named: "openweathermapicon")
+        cell.sourceButton2.imageView?.image = UIImage(named: "accuweathericon")
         
         let target1 = WeatherDataSource.shared.openWeatherMapForecastList[indexPath.row]
         cell.dateLabel.text = target1.date.dateString
@@ -214,5 +204,19 @@ extension CurrentDestinationViewController {
 extension CurrentDestinationViewController {
     @IBAction func reloadLocation(_ sender: UIButton) {
         LocationManager.shared.updateLocation()
+    }
+    
+    @IBAction func pressOpenWeatherMapIcon(_ sender: UIButton) {
+        let alert = UIAlertController(title: "출처", message: "openweathermap.org", preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
+    }
+    
+    @IBAction func pressAccuWeatherIcon(_ sender: UIButton) {
+        let alert = UIAlertController(title: "출처", message: "accuweather.com", preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
     }
 }
