@@ -13,6 +13,8 @@ class ForecastTableViewCell: UITableViewCell {
     
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
+    @IBOutlet weak var sourceButton1: UIButton!
+    @IBOutlet weak var sourceButton2: UIButton!
     
     @IBOutlet weak var weatherImageView1: UIImageView!
     @IBOutlet weak var temperatureLabel1: UILabel!
