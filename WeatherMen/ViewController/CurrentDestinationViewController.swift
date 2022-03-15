@@ -109,7 +109,7 @@ extension CurrentDestinationViewController: UITableViewDataSource {
         cell.timeLabel.text = target1.date.timeString
         cell.weatherImageView1.image = UIImage(named: target1.icon)
         cell.temperatureLabel1.text = target1.temperature.temperatureString
-        if isRainyOpenWeatherMap(icon: target1.icon) {
+        if isRainyOpenWeatherMap(pop: target1.precipitationProbability) {
             cell.precipitationPercentLabel1.isHidden = false
             cell.precipitationPercentLabel1.text = target1.precipitationProbability.percentString
         } else {
@@ -121,7 +121,7 @@ extension CurrentDestinationViewController: UITableViewDataSource {
         let target2 = WeatherDataSource.shared.accuWeatherForecastList[indexPath.row]
         cell.weatherImageView2.image = UIImage(named: convertAccuWeatherIconToOpenWeatherMap(weatherIcon: target2.icon))
         cell.temperatureLabel2.text = target2.temperature.temperatureString
-        if isRainyAccuWeather(icon: target2.icon) {
+        if isRainyAccuWeather(pop: target2.precipitationProbability) {
             cell.precipitationPercentLabel2.isHidden = false
             let precipitationProbabilityDoubleType = Double(target2.precipitationProbability)
             let pop = precipitationProbabilityDoubleType / 100
@@ -174,6 +174,7 @@ extension CurrentDestinationViewController {
         }
     }
     
+    /* Check by weather status
     private func isRainyOpenWeatherMap(icon: String) -> Bool {
         let rainyIcons = ["09d", "09n", "10d", "10n", "11d", "11n"]
         if rainyIcons.contains(icon) {
@@ -181,8 +182,16 @@ extension CurrentDestinationViewController {
         } else {
             return false
         }
+    } */
+    private func isRainyOpenWeatherMap(pop: Double) -> Bool {
+        if pop == 0 {
+            return false
+        } else {
+            return true
+        }
     }
     
+    /*Check by weather status
     private func isRainyAccuWeather(icon: Int) -> Bool {
         let stringIcon = convertAccuWeatherIconToOpenWeatherMap(weatherIcon: icon)
         let rainyIcons = ["09d", "09n", "10d", "10n", "11d", "11n"]
@@ -190,6 +199,13 @@ extension CurrentDestinationViewController {
             return true
         } else {
             return false
+        }
+    } */
+    private func isRainyAccuWeather(pop: Int) -> Bool {
+        if pop == 0 {
+            return false
+        } else {
+            return true
         }
     }
 }
