@@ -20,7 +20,6 @@ class CurrentDestinationViewController: UIViewController {
         
         locationLabel.alpha = 0.0
         reloadLocationButton.alpha = 0.0
-        reloadLocationButton.imageView?.image = UIImage(named: "refresh")?.withRenderingMode(.alwaysOriginal)
         listTableView.alpha = 0.0
         loader.alpha = 1.0
         
@@ -35,7 +34,6 @@ class CurrentDestinationViewController: UIViewController {
         NotificationCenter.default.addObserver(forName: WeatherDataSource.weatherInfoDidUpdate, object: nil, queue: .main) { (notification) in
             self.listTableView.reloadData()
             self.locationLabel.text = LocationManager.shared.currentLocationTitle
-            self.reloadLocationButton.imageView?.image = UIImage(named: "refresh")?.withRenderingMode(.alwaysOriginal)
             
             UIView.animate(withDuration: 0.3) {
                 self.locationLabel.alpha = 1.0
