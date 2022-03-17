@@ -17,29 +17,19 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="40" translatesAutoresizingMaskIntoConstraints="NO" id="SbV-xk-kQr">
-                                <rect key="frame" x="57" y="282" width="300" height="332"/>
-                                <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="temporaryicon" translatesAutoresizingMaskIntoConstraints="NO" id="zfF-CF-Nnf">
-                                        <rect key="frame" x="22" y="0.0" width="256" height="256"/>
-                                    </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="WeatherMen" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uhK-jC-42b">
-                                        <rect key="frame" x="56.5" y="296" width="187" height="36"/>
-                                        <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="30"/>
-                                        <color key="textColor" systemColor="systemIndigoColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash" translatesAutoresizingMaskIntoConstraints="NO" id="zfF-CF-Nnf">
+                                <rect key="frame" x="172" y="393" width="70" height="70"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="300" id="ATl-Sb-vmE"/>
+                                    <constraint firstAttribute="width" constant="70" id="Sl6-29-YGV"/>
+                                    <constraint firstAttribute="height" constant="70" id="XWe-pq-FXb"/>
                                 </constraints>
-                            </stackView>
+                            </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="SbV-xk-kQr" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="2Tq-AP-wGe"/>
-                            <constraint firstItem="SbV-xk-kQr" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="pCr-nS-wpn"/>
+                            <constraint firstItem="zfF-CF-Nnf" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" constant="-20" id="1SE-gf-zGZ"/>
+                            <constraint firstItem="zfF-CF-Nnf" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="qM6-ck-pga"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -49,12 +39,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="temporaryicon" width="256" height="256"/>
+        <image name="splash" width="239.5" height="239.5"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemIndigoColor">
-            <color red="0.34509803921568627" green="0.33725490196078434" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

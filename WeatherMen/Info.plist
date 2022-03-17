@@ -7,12 +7,6 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>현재 위치의 날씨 정보를 표시합니다.</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>현재 위치의 날씨 정보를 표시합니다.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>현재 위치의 날씨 정보를 표시합니다.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
